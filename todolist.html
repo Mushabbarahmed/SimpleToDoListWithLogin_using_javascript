@@ -1,0 +1,184 @@
+<html>
+    <head>
+        <title>to do list</title>
+    </head>
+    <style>
+
+    </style>
+    <body style="background-color: lightblue;">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color:grey ;" >
+            <div class="container-fluid" style="background-color: lightgoldenrodyellow;color:white;" >
+              <a class="navbar-brand" href="#"><b>TO DO LIST</b></a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      options
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#">Action</a></li>
+                      <li><a class="dropdown-item" href="#">Another action</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                  </li>
+                </ul>
+                <form style="padding:10px;"class="d-flex" role="search">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-outline-success" type="submit" >Search</button>
+                </form>
+              </div>
+            </div>
+          </nav>
+
+          <center><form style="width:500px;background-color: lightgray;margin:20px;padding:20px;border-radius:20px;">
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Email address</label>
+              <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+              <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Password</label>
+              <input type="password" class="form-control" id="pass">
+            </div>
+            
+            <button type="button"  class="btn btn-primary" onclick="login()">Submit</button>
+          </form></center>
+
+
+          <center><form style="width:200px;display:none;" id="form1">
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label"><b>Title</b></label>
+              <input type="text" class="form-control" id="title" aria-describedby="emailHelp">
+              <div id="emailHelp" class="form-text">add your title here</div>
+            </div>
+            <div class="form-floating" >
+                <textarea class="form-control" placeholder="Leave a comment here" id="description"></textarea>
+                <label for="floatingTextarea">description</label>
+              </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="exampleCheck1">
+              <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            </div>
+            <button class="btn btn-primary" id="add">add</button>
+            <button class="btn btn-primary" onclick="cleard()">clear</button></center>  
+          
+        </form>
+          <table class="table" >
+            <thead>
+              <tr>
+                <th scope="col">SNO</th>
+                <th scope="col">item title</th>
+                <th scope="col">des</th>
+                <th scope="col">actions</th>
+              </tr>
+            </thead>
+            <tbody id="tableb">
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+            </tbody>
+          </table>
+          <script>
+            function getupdate(){
+             console.log('updating...')
+             tit=document.getElementById("title").value
+         des=document.getElementById("description").value
+             if(localStorage.getItem('itemname')==null){
+         arr=[]
+         arr.push([tit,des])
+                 localStorage.setItem('itemname',JSON.stringify(arr))
+     }
+     else{
+         arrstr=localStorage.getItem('itemname')
+         arr=JSON.parse(arrstr)
+         arr.push([tit,des])
+         localStorage.setItem('itemname',JSON.stringify(arr))
+         
+     }
+     update()
+     
+            }
+            function update(){
+             if (localStorage.getItem('itemname')==null){
+                 arr=[]
+                 localStorage.setItem('itemname', JSON.stringify(arr))
+                 }
+            else{
+             arrstr=localStorage.getItem('itemname')
+             arr=JSON.parse(arrstr)
+             
+         
+            }
+     
+            let tablebody=document.getElementById('tableb')
+            let str=""
+            arr.forEach((element,index) => {
+             str+=`
+             <tr>
+                     <th scope="row">${index}</th>
+                     <td>${element[0]}</td>
+                     <td>${element[1]}</td>
+                     <td><button onclick="deleted(${index})">delete</button></td>
+                   </tr>
+             `
+            });
+            tablebody.innerHTML=str
+             }
+             add=document.getElementById("add")
+             
+             add.addEventListener("click",getupdate)
+             update()
+
+
+             function deleted(itemindex){
+                console.log("deleted",itemindex)
+                arrstr=localStorage.getItem('itemname')
+                arr=JSON.parse(arrstr)
+                arr.splice(itemindex,1)
+                localStorage.setItem('itemname',JSON.stringify(arr))
+                update()
+            }
+            function cleard()
+            {
+                if(confirm("do u want to really clear all "))
+                console.log("clear")
+            
+                localStorage.clear()
+                
+                update()
+
+            }
+            function login(){
+                email=document.getElementById('email').value
+                pass=document.getElementById('pass').value
+                if (email=="xyz@gmail.com" && pass=="password"){
+                    console.log("welcome")
+                        document.getElementById('form1').style.display="block"
+                }  
+                else{
+                    console.log("incorrect password")
+
+                }
+            }
+         </script>
+    </body>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+</html>
